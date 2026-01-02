@@ -1,3 +1,4 @@
+// Sonakshi Boutique POS - Printer Status Bar Component
 "use client";
 
 import { Printer, RefreshCw, CheckCircle2, XCircle, AlertCircle, Download } from "lucide-react";

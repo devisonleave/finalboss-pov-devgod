@@ -1,3 +1,4 @@
+// Sonakshi Boutique POS - Label Printer Page
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";

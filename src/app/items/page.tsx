@@ -1,3 +1,4 @@
+// Sonakshi Boutique POS - Items Page
 "use client";
 
 import { useEffect, useState, useRef, useMemo } from 'react';

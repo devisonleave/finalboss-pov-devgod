@@ -1,3 +1,4 @@
+// Sonakshi Boutique POS - Stock Management Page
 "use client";
 
 import { useEffect, useState, useRef } from 'react';

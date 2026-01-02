@@ -1,3 +1,4 @@
+// Sonakshi Boutique POS - Type Definitions
 export interface Item {
   id: string;
   name: string;

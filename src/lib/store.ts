@@ -1,3 +1,4 @@
+// Sonakshi Boutique POS - Data Store
 import { Item, Sale, StockMovement } from './types';
 import { supabase } from './supabase';
 
