@@ -1,4 +1,3 @@
-// Sonakshi Boutique POS - Printer Connection Hook
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";

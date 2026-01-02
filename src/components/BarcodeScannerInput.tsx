@@ -1,4 +1,3 @@
-// Sonakshi Boutique POS - Barcode Scanner Input Component
 "use client";
 
 import { useEffect, useRef, useCallback, useState } from 'react';

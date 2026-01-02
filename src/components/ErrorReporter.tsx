@@ -1,4 +1,3 @@
-// Sonakshi Boutique POS - Error Reporter Component
 "use client";
 
 import { useEffect, useRef } from "react";

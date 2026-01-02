@@ -1,4 +1,3 @@
-// Sonakshi Boutique POS - Barcodes Page
 "use client";
 
 import { useEffect, useState, useRef } from 'react';

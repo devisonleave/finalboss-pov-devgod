@@ -1,4 +1,3 @@
-// Sonakshi Boutique POS - TSPL Printer Commands
 export interface LabelConfig {
   width: number;
   height: number;

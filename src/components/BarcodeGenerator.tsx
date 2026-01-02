@@ -1,4 +1,3 @@
-// Sonakshi Boutique POS - Barcode Generator Component
 "use client";
 
 import { useEffect, useRef } from 'react';

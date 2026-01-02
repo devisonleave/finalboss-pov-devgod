@@ -1,4 +1,3 @@
-// Sonakshi Boutique POS - JSPM Error Suppressor Component
 "use client";
 
 import { useEffect } from "react";

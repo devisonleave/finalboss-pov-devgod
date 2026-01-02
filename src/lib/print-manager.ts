@@ -1,4 +1,3 @@
-// Sonakshi Boutique POS - Print Manager
 "use client";
 
 import type { PrinterStatus, PrintResult } from "./tspl-printer";

@@ -1,4 +1,3 @@
-// Sonakshi Boutique POS - Mobile Detection Hook
 import * as React from 'react';
 
 const MOBILE_BREAKPOINT = 768;
