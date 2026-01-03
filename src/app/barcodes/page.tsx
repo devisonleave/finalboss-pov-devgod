@@ -148,6 +148,11 @@ export default function BarcodesPage() {
               size: ${savedLabelWidth} ${savedLabelHeight};
               margin: 0;
             }
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
             body {
               margin: 0;
               padding: 0;
@@ -156,7 +161,7 @@ export default function BarcodesPage() {
             .label {
               width: ${savedLabelWidth};
               height: ${savedLabelHeight};
-              padding: 2mm;
+              padding: 1.5mm;
               box-sizing: border-box;
               page-break-after: always;
               display: flex;
@@ -168,26 +173,37 @@ export default function BarcodesPage() {
             .label:last-child {
               page-break-after: auto;
             }
-            .item-name {
-              font-size: 9pt;
+            .org-name {
+              font-size: 7pt;
               font-weight: bold;
-              margin-bottom: 2px;
+              letter-spacing: 0.5px;
+              margin-bottom: 1px;
+            }
+            .item-name {
+              font-size: 8pt;
+              font-weight: 600;
+              margin-bottom: 1px;
               max-width: 100%;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
             }
             .item-price {
-              font-size: 11pt;
+              font-size: 10pt;
               font-weight: bold;
-              margin-bottom: 3px;
+              margin-bottom: 2px;
             }
             .barcode-container {
-              margin: 2px 0;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 100%;
             }
-            .barcode-container svg {
+            .barcode-container img {
               max-width: 100%;
               height: auto;
+              display: block;
+              margin: 0 auto;
             }
           </style>
         </head>
@@ -200,18 +216,20 @@ export default function BarcodesPage() {
       JsBarcode(canvas, item.barcode, {
         format: 'CODE128',
         width: 1.5,
-        height: 35,
+        height: 30,
         displayValue: true,
-        fontSize: 10,
-        margin: 2,
+        fontSize: 9,
+        margin: 0,
+        textMargin: 1,
       });
 
       printWindow.document.write(`
         <div class="label">
+          <div class="org-name">SONAKSHI BOUTIQUE</div>
           <div class="item-name">${item.name}</div>
           <div class="item-price">₹${item.sellingPrice.toFixed(2)}</div>
           <div class="barcode-container">
-            <img src="${canvas.toDataURL()}" style="max-width: 100%; height: auto;" />
+            <img src="${canvas.toDataURL()}" />
           </div>
         </div>
       `);
@@ -609,21 +627,24 @@ export default function BarcodesPage() {
                   </p>
                   <div className="space-y-3 max-h-[500px] overflow-y-auto">
                     {items
-                      .filter(item => selectedItems.has(item.id))
-                      .slice(0, 5)
-                      .map((item) => (
-                        <div key={item.id} className="bg-white p-3 rounded-lg">
-                          <p className="text-xs font-semibold text-slate-900 text-center truncate">
-                            {item.name}
-                          </p>
-                          <p className="text-sm font-bold text-slate-900 text-center mb-1">
-                            ₹{item.sellingPrice.toFixed(2)}
-                          </p>
-                          <div className="flex justify-center">
-                            <BarcodeGenerator value={item.barcode} width={1.5} height={35} />
+                        .filter(item => selectedItems.has(item.id))
+                        .slice(0, 5)
+                        .map((item) => (
+                          <div key={item.id} className="bg-white p-3 rounded-lg flex flex-col items-center">
+                            <p className="text-[7pt] font-bold text-slate-900 text-center tracking-wide">
+                              SONAKSHI BOUTIQUE
+                            </p>
+                            <p className="text-[8pt] font-semibold text-slate-900 text-center truncate max-w-full">
+                              {item.name}
+                            </p>
+                            <p className="text-[10pt] font-bold text-slate-900 text-center mb-1">
+                              ₹{item.sellingPrice.toFixed(2)}
+                            </p>
+                            <div className="flex justify-center w-full">
+                              <BarcodeGenerator value={item.barcode} width={1.5} height={30} />
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
                     {selectedItems.size > 5 && (
                       <p className="text-xs text-slate-500 text-center">
                         +{selectedItems.size - 5} more...

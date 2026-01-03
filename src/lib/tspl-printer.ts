@@ -70,29 +70,28 @@ export function generateTSPLCommands(
     pair.forEach((label, col) => {
       const offsetX = col * (singleLabelWidth + colGapDots);
       const centerX = offsetX + Math.round(singleLabelWidth / 2);
-      const labelCenterX = Math.round(singleLabelWidth / 2);
 
-      let y = 5;
-      commands += `TEXT ${centerX},${y},"1",0,1,1,2,"Sonakshi Boutique"\r\n`;
+      let y = 8;
+      commands += `TEXT ${centerX},${y},"2",0,1,1,2,"SONAKSHI BOUTIQUE"\r\n`;
 
-      y += 18;
-      const barcodeHeight = 40;
-      const barcodeWidth = Math.min(singleLabelWidth - 20, 120);
-      const barcodeX = offsetX + Math.round((singleLabelWidth - barcodeWidth) / 2);
-      commands += `BARCODE ${barcodeX},${y},"128",${barcodeHeight},0,0,2,2,"${label.barcode}"\r\n`;
+      y += 24;
+      const barcodeHeight = 45;
+      const barcodeX = offsetX + 10;
+      const barcodeWidthNarrow = 2;
+      commands += `BARCODE ${barcodeX},${y},"128",${barcodeHeight},0,0,${barcodeWidthNarrow},${barcodeWidthNarrow},"${label.barcode}"\r\n`;
 
-      y += barcodeHeight + 3;
-      commands += `TEXT ${centerX},${y},"1",0,1,1,2,"${label.barcode}"\r\n`;
+      y += barcodeHeight + 5;
+      commands += `TEXT ${centerX},${y},"2",0,1,1,2,"${label.barcode}"\r\n`;
 
-      y += 14;
+      y += 20;
       if (label.productName) {
-        const truncatedName = truncateText(label.productName, 18);
-        commands += `TEXT ${centerX},${y},"1",0,1,1,2,"${truncatedName}"\r\n`;
+        const truncatedName = truncateText(label.productName, 16);
+        commands += `TEXT ${centerX},${y},"2",0,1,1,2,"${truncatedName}"\r\n`;
       }
 
-      y += 14;
+      y += 20;
       if (label.price) {
-        commands += `TEXT ${centerX},${y},"2",0,1,1,2,"Rs.${label.price}"\r\n`;
+        commands += `TEXT ${centerX},${y},"3",0,1,1,2,"Rs.${label.price}"\r\n`;
       }
     });
 
@@ -131,27 +130,27 @@ export function generateSingleLabelTSPL(
     const offsetX = col * (singleLabelWidth + colGapDots);
     const centerX = offsetX + Math.round(singleLabelWidth / 2);
 
-    let y = 5;
-    commands += `TEXT ${centerX},${y},"1",0,1,1,2,"Sonakshi Boutique"\r\n`;
+    let y = 8;
+    commands += `TEXT ${centerX},${y},"2",0,1,1,2,"SONAKSHI BOUTIQUE"\r\n`;
 
-    y += 18;
-    const barcodeHeight = 40;
-    const barcodeWidth = Math.min(singleLabelWidth - 20, 120);
-    const barcodeX = offsetX + Math.round((singleLabelWidth - barcodeWidth) / 2);
-    commands += `BARCODE ${barcodeX},${y},"128",${barcodeHeight},0,0,2,2,"${label.barcode}"\r\n`;
+    y += 24;
+    const barcodeHeight = 45;
+    const barcodeX = offsetX + 10;
+    const barcodeWidthNarrow = 2;
+    commands += `BARCODE ${barcodeX},${y},"128",${barcodeHeight},0,0,${barcodeWidthNarrow},${barcodeWidthNarrow},"${label.barcode}"\r\n`;
 
-    y += barcodeHeight + 3;
-    commands += `TEXT ${centerX},${y},"1",0,1,1,2,"${label.barcode}"\r\n`;
+    y += barcodeHeight + 5;
+    commands += `TEXT ${centerX},${y},"2",0,1,1,2,"${label.barcode}"\r\n`;
 
-    y += 14;
+    y += 20;
     if (label.productName) {
-      const truncatedName = truncateText(label.productName, 18);
-      commands += `TEXT ${centerX},${y},"1",0,1,1,2,"${truncatedName}"\r\n`;
+      const truncatedName = truncateText(label.productName, 16);
+      commands += `TEXT ${centerX},${y},"2",0,1,1,2,"${truncatedName}"\r\n`;
     }
 
-    y += 14;
+    y += 20;
     if (label.price) {
-      commands += `TEXT ${centerX},${y},"2",0,1,1,2,"Rs.${label.price}"\r\n`;
+      commands += `TEXT ${centerX},${y},"3",0,1,1,2,"Rs.${label.price}"\r\n`;
     }
   }
 
