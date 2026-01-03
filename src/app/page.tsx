@@ -1,3 +1,4 @@
+// Dashboard page - displays sales metrics, inventory stats, charts, and alerts
 "use client";
 
 import { useEffect, useState } from 'react';
