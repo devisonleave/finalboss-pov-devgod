@@ -1,7 +1,5 @@
 "use client";
 
- //devisonleavebby//
-
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getItems, getSales } from '@/lib/store';
