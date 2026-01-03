@@ -1,3 +1,4 @@
+//dev is great bby//
 export interface LabelConfig {
   width: number;
   height: number;
