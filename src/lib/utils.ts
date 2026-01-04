@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+<<<<<<< HEAD
 
 export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-IN', {
@@ -30,3 +31,5 @@ export function formatDateShort(date: string | Date): string {
     year: 'numeric',
   }).format(new Date(date));
 }
+=======
+>>>>>>> 01bcb1f (Sync codebase)
