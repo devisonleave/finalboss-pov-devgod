@@ -146,6 +146,9 @@ export default function BarcodesPage() {
       const savedLabelHeight = localStorage.getItem('labelHeight') || '25mm';
       const savedLabelColumns = parseInt(localStorage.getItem('labelColumns') || '1');
       const savedLabelGap = localStorage.getItem('labelGap') || '2mm';
+      const savedorgsize = localStorage.getItem('ORG size');
+      const saveditemsize = localStorage.getItem('Item size');
+      const savedpricesize = localStorage.getItem('Price size');
       
       const widthNum = parseFloat(savedLabelWidth.replace('mm', ''));
       const gapNum = parseFloat(savedLabelGap.replace('mm', ''));
@@ -199,13 +202,13 @@ export default function BarcodesPage() {
                 height: 100%;
               }
               .org-name {
-                font-size: 7pt;
+                font-size: ${savedorgsize};
                 font-weight: bold;
                 letter-spacing: 0.5px;
                 margin-bottom: 1px;
               }
               .item-name {
-                font-size: 8pt;
+                font-size: ${saveditemsize};
                 font-weight: 600;
                 margin-bottom: 1px;
                 max-width: 100%;
@@ -214,7 +217,7 @@ export default function BarcodesPage() {
                 white-space: nowrap;
               }
               .item-price {
-                font-size: 10pt;
+                font-size: ${savedpricesize};
                 font-weight: bold;
                 margin-bottom: 2px;
               }
@@ -245,7 +248,7 @@ export default function BarcodesPage() {
           const JsBarcode = require('jsbarcode');
           JsBarcode(canvas, item.barcode, {
             format: 'CODE128',
-            width: 1.5,
+            width: 4.0,
             height: 30,
             displayValue: true,
             fontSize: 9,
