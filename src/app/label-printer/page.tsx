@@ -16,6 +16,7 @@ import {
 import { PrinterStatusBar } from "@/components/printer-status-bar";
 import { usePrinterConnection } from "@/hooks/use-printer-connection";
 import { generateTSPLCommands, type BarcodeLabel } from "@/lib/tspl-printer";
+import { TSPLPreview } from "@/components/tspl-preview";
 import { printRawTSPL, getJSPrintManagerDownloadUrl } from "@/lib/print-manager";
 import { getItems } from "@/lib/store";
 import { Item } from "@/lib/types";
