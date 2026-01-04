@@ -103,17 +103,14 @@ export async function initializePrintManager(): Promise<PrinterStatus> {
       }
     };
 
-    try {
-      // Enable auto reconnect to make the connection more stable
-      jspm.JSPrintManager.auto_reconnect = true;
-      
-      const isHttps = window.location.protocol === "https:";
-      
-      // Set ports explicitly
-      jspm.JSPrintManager.WS_PORT = 23443;
-      jspm.JSPrintManager.WSS_PORT = 25443;
-      
-      // Attempt to connect. We try common JSPM ports.
+      try {
+        const jspmAny = jspm.JSPrintManager as any;
+        // Enable auto reconnect to make the connection more stable
+        jspmAny.auto_reconnect = true;
+        
+        const isHttps = window.location.protocol === "https:";
+        
+        // Attempt to connect. We try common JSPM ports.
       // JSPrintManager 6+ uses 25443 (secure) / 23443 (non-secure)
       // JSPrintManager 5 uses 24443 (secure)
       const primaryPort = isHttps ? 25443 : 23443;
@@ -124,7 +121,7 @@ export async function initializePrintManager(): Promise<PrinterStatus> {
           await jspm.JSPrintManager.start(isHttps, 'localhost', port);
           // Wait a bit to see if it opens
           for (let i = 0; i < 5; i++) {
-            if (jspm.JSPrintManager.websocket_status === jspm.WSStatus.Open) return true;
+            if (jspm.JSPrintManager.websocket_status === (jspm.WSStatus as any).Open) return true;
             await new Promise(r => setTimeout(r, 500));
           }
           return false;
@@ -171,9 +168,9 @@ export async function getPrinterStatus(): Promise<PrinterStatus> {
   if (!jspm) return "not_installed";
 
   try {
-    if (jspm.JSPrintManager.websocket_status === jspm.WSStatus.Open) {
+    if (jspm.JSPrintManager.websocket_status === (jspm.WSStatus as any).Open) {
       return "connected";
-    } else if (jspm.JSPrintManager.websocket_status === jspm.WSStatus.Closed) {
+    } else if (jspm.JSPrintManager.websocket_status === (jspm.WSStatus as any).Closed) {
       return "disconnected";
     }
     return "checking";
@@ -187,7 +184,7 @@ export async function getInstalledPrinters(): Promise<string[]> {
   if (!jspm) return [];
 
   try {
-    if (jspm.JSPrintManager.websocket_status !== jspm.WSStatus.Open) {
+    if (jspm.JSPrintManager.websocket_status !== (jspm.WSStatus as any).Open) {
       await initializePrintManager();
     }
     const printers = await jspm.JSPrintManager.getPrinters();
@@ -210,7 +207,7 @@ export async function printRawTSPL(
   }
 
   try {
-    if (jspm.JSPrintManager.websocket_status !== jspm.WSStatus.Open) {
+    if (jspm.JSPrintManager.websocket_status !== (jspm.WSStatus as any).Open) {
       const status = await initializePrintManager();
       if (status !== "connected") {
         return {
