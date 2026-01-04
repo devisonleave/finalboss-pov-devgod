@@ -27,11 +27,13 @@ export function PrinterStatusBar() {
       text: "Connected",
       color: "text-emerald-400",
     },
-    disconnected: {
-      icon: <XCircle className="h-4 w-4 text-red-400" />,
-      text: "Disconnected",
-      color: "text-red-400",
-    },
+      disconnected: {
+        icon: <XCircle className="h-4 w-4 text-red-400" />,
+        text: "Disconnected",
+        color: "text-red-400",
+        tip: window.location.protocol === "https:" ? "Try visiting https://localhost:25443 to accept the certificate if the app is running." : "Ensure JSPrintManager app is running."
+      },
+
     not_installed: {
       icon: <AlertCircle className="h-4 w-4 text-orange-400" />,
       text: "Not Installed",

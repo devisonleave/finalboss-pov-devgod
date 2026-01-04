@@ -107,35 +107,52 @@ export async function initializePrintManager(): Promise<PrinterStatus> {
       // Enable auto reconnect to make the connection more stable
       jspm.JSPrintManager.auto_reconnect = true;
       
-      jspm.JSPrintManager.start()
-        .then(() => {
-          const checkConnection = (attempts: number) => {
-            if (resolved) return;
-            if (attempts <= 0) {
-              // If we still haven't connected after all attempts, resolve as disconnected
-              // but auto_reconnect will keep trying in the background
-              safeResolve("disconnected");
-              return;
-            }
-            
-            try {
-              if (jspm.JSPrintManager.websocket_status === jspm.WSStatus.Open) {
+      const isHttps = window.location.protocol === "https:";
+      
+      // Set ports explicitly
+      jspm.JSPrintManager.WS_PORT = 23443;
+      jspm.JSPrintManager.WSS_PORT = 25443;
+      
+      // Attempt to connect. We try common JSPM ports.
+      // JSPrintManager 6+ uses 25443 (secure) / 23443 (non-secure)
+      // JSPrintManager 5 uses 24443 (secure)
+      const primaryPort = isHttps ? 25443 : 23443;
+      const secondaryPort = isHttps ? 24443 : 23443;
+      
+      const tryConnect = async (port: number): Promise<boolean> => {
+        try {
+          await jspm.JSPrintManager.start(isHttps, 'localhost', port);
+          // Wait a bit to see if it opens
+          for (let i = 0; i < 5; i++) {
+            if (jspm.JSPrintManager.websocket_status === jspm.WSStatus.Open) return true;
+            await new Promise(r => setTimeout(r, 500));
+          }
+          return false;
+        } catch {
+          return false;
+        }
+      };
+
+      tryConnect(primaryPort).then(success => {
+        if (success) {
+          safeResolve("connected");
+        } else {
+          // Try secondary port if primary failed
+          if (isHttps && primaryPort !== secondaryPort) {
+            tryConnect(secondaryPort).then(secondSuccess => {
+              if (secondSuccess) {
                 safeResolve("connected");
               } else {
-                // Wait longer between attempts as JSPM can take a few seconds
-                setTimeout(() => checkConnection(attempts - 1), 1000);
+                safeResolve("disconnected");
               }
-            } catch {
-              safeResolve("not_installed");
-            }
-          };
-          
-          // Initial wait before first check
-          setTimeout(() => checkConnection(10), 500);
-        })
-        .catch(() => {
-          safeResolve("not_installed");
-        });
+            });
+          } else {
+            safeResolve("disconnected");
+          }
+        }
+      }).catch(() => {
+        safeResolve("not_installed");
+      });
 
       // Increased global timeout to 12 seconds to give more time for connection
       setTimeout(() => {
