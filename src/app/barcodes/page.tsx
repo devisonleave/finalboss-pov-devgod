@@ -202,13 +202,13 @@ export default function BarcodesPage() {
                 height: 100%;
               }
               .org-name {
-                font-size: 15pt;
+                font-size: 23pt;
                 font-weight: bold;
                 letter-spacing: 0.5px;
                 margin-bottom: 1px;
               }
               .item-name {
-                font-size: 13pt;
+                font-size: 20pt;
                 font-weight: 600;
                 margin-bottom: 1px;
                 max-width: 100%;
@@ -217,7 +217,7 @@ export default function BarcodesPage() {
                 white-space: nowrap;
               }
               .item-price {
-                font-size: 13pt;
+                font-size: 20pt;
                 font-weight: bold;
                 margin-bottom: 2px;
               }
@@ -248,8 +248,8 @@ export default function BarcodesPage() {
           const JsBarcode = require('jsbarcode');
           JsBarcode(canvas, item.barcode, {
             format: 'CODE128',
-            width: 3.0,
-            height: 60,
+            width: 5.0,
+            height: 90,
             displayValue: true,
             fontSize: 13,
             margin: 0,
