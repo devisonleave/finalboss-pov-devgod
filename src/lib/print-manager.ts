@@ -104,39 +104,43 @@ export async function initializePrintManager(): Promise<PrinterStatus> {
     };
 
     try {
-      jspm.JSPrintManager.auto_reconnect = false;
+      // Enable auto reconnect to make the connection more stable
+      jspm.JSPrintManager.auto_reconnect = true;
       
       jspm.JSPrintManager.start()
         .then(() => {
           const checkConnection = (attempts: number) => {
             if (resolved) return;
             if (attempts <= 0) {
-              safeResolve("not_installed");
+              // If we still haven't connected after all attempts, resolve as disconnected
+              // but auto_reconnect will keep trying in the background
+              safeResolve("disconnected");
               return;
             }
             
             try {
               if (jspm.JSPrintManager.websocket_status === jspm.WSStatus.Open) {
                 safeResolve("connected");
-              } else if (jspm.JSPrintManager.websocket_status === jspm.WSStatus.Closed) {
-                setTimeout(() => checkConnection(attempts - 1), 500);
               } else {
-                setTimeout(() => checkConnection(attempts - 1), 500);
+                // Wait longer between attempts as JSPM can take a few seconds
+                setTimeout(() => checkConnection(attempts - 1), 1000);
               }
             } catch {
               safeResolve("not_installed");
             }
           };
           
-          setTimeout(() => checkConnection(5), 300);
+          // Initial wait before first check
+          setTimeout(() => checkConnection(10), 500);
         })
         .catch(() => {
           safeResolve("not_installed");
         });
 
+      // Increased global timeout to 12 seconds to give more time for connection
       setTimeout(() => {
-        safeResolve("not_installed");
-      }, 3000);
+        safeResolve("disconnected");
+      }, 12000);
     } catch {
       safeResolve("not_installed");
     }

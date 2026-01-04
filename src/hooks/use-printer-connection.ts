@@ -114,16 +114,31 @@ export function usePrinterConnection() {
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const { getPrinterStatus } = await import("@/lib/print-manager");
+        const { getPrinterStatus, getInstalledPrinters } = await import("@/lib/print-manager");
         const currentStatus = await getPrinterStatus();
-        setStatus(currentStatus);
+        
+        setStatus(prevStatus => {
+          // If we just became connected, fetch printers
+          if (currentStatus === "connected" && prevStatus !== "connected") {
+            getInstalledPrinters().then(installedPrinters => {
+              setPrinters(installedPrinters);
+              const tscPrinter = installedPrinters.find(
+                (p) => p.toLowerCase().includes("tsc") || p.toLowerCase().includes("te244")
+              );
+              if (tscPrinter && !selectedPrinter) {
+                setSelectedPrinter(tscPrinter);
+              }
+            });
+          }
+          return currentStatus;
+        });
       } catch {
         setStatus("not_installed");
       }
-    }, 10000);
+    }, 5000); // Reduced interval to 5s for faster feedback
 
     return () => clearInterval(interval);
-  }, []);
+  }, [selectedPrinter]);
 
   return {
     status,
