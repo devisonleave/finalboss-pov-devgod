@@ -16,7 +16,6 @@ import {
 import { PrinterStatusBar } from "@/components/printer-status-bar";
 import { usePrinterConnection } from "@/hooks/use-printer-connection";
 import { generateTSPLCommands, type BarcodeLabel } from "@/lib/tspl-printer";
-import { TSPLPreview } from "@/components/tspl-preview";
 import { printRawTSPL, getJSPrintManagerDownloadUrl } from "@/lib/print-manager";
 import { getItems } from "@/lib/store";
 import { Item } from "@/lib/types";
@@ -377,112 +376,94 @@ export default function LabelPrinterPage() {
           </CardContent>
         </Card>
 
-          <Card className="bg-slate-900/50 border-slate-800">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center justify-between">
-                <span className="flex items-center gap-2">
-                  <Printer className="h-5 w-5 text-amber-400" />
-                  Print Queue & Preview
+        <Card className="bg-slate-900/50 border-slate-800">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <Printer className="h-5 w-5 text-amber-400" />
+                Print Queue
+              </span>
+              {selectedItems.length > 0 && (
+                <span className="text-sm font-normal text-slate-400">
+                  {totalLabels} labels / {totalStrips} strips
                 </span>
-                {selectedItems.length > 0 && (
-                  <span className="text-sm font-normal text-slate-400">
-                    {totalLabels} labels / {totalStrips} strips
-                  </span>
-                )}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {selectedItems.length === 0 ? (
-                <div className="rounded-lg border border-dashed border-slate-700 p-8 text-center">
-                  <Printer className="h-12 w-12 mx-auto mb-3 text-slate-600" />
-                  <p className="text-slate-400">No items in queue</p>
-                  <p className="text-slate-500 text-sm mt-1">Search and select items to add</p>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  <div className="space-y-3">
-                    {selectedItems.map((sel) => (
-                      <div
-                        key={sel.item.id}
-                        className="p-3 rounded-lg bg-slate-800/50 border border-slate-700"
-                      >
-                        <div className="flex justify-between items-start mb-2">
-                          <div className="flex-1 min-w-0">
-                            <p className="font-medium text-white truncate">{sel.item.name}</p>
-                            <p className="text-xs text-slate-400 font-mono">{sel.item.barcode}</p>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => removeSelectedItem(sel.item.id)}
-                            className="h-6 w-6 text-red-400 hover:text-red-300 hover:bg-red-500/10 -mt-1 -mr-1"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-amber-400 font-semibold">Rs. {sel.item.sellingPrice}</span>
-                          <div className="flex items-center gap-1">
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              onClick={() => updateCopies(sel.item.id, -1)}
-                              className="h-7 w-7 border-slate-600 text-white"
-                            >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <span className="w-8 text-center text-white font-semibold">{sel.copies}</span>
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              onClick={() => updateCopies(sel.item.id, 1)}
-                              className="h-7 w-7 border-slate-600 text-white"
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-slate-400 text-[10px] uppercase tracking-wider font-bold">Live Preview</Label>
-                    <TSPLPreview 
-                      commands={generateTSPLCommands(
-                        selectedItems.flatMap(sel => 
-                          Array(sel.copies).fill({
-                            barcode: sel.item.barcode,
-                            productName: sel.item.name,
-                            price: sel.item.sellingPrice.toString()
-                          })
-                        ), 
-                        1
-                      )} 
-                    />
-                  </div>
-
-                  <div className="pt-3 border-t border-slate-700">
-                    <Button
-                      onClick={handlePrintAll}
-                      disabled={isPrinting || status !== "connected"}
-                      className="w-full h-12 gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-900 font-semibold text-lg"
-                    >
-                      {isPrinting ? (
-                        <>Printing...</>
-                      ) : (
-                        <>
-                          <Printer className="h-5 w-5" />
-                          Print All ({totalLabels} labels)
-                        </>
-                      )}
-                    </Button>
-                    <p className="text-xs text-slate-500 text-center mt-2">
-                      {totalStrips} strip(s) will be printed
-                    </p>
-                  </div>
-                </div>
               )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {selectedItems.length === 0 ? (
+              <div className="rounded-lg border border-dashed border-slate-700 p-8 text-center">
+                <Printer className="h-12 w-12 mx-auto mb-3 text-slate-600" />
+                <p className="text-slate-400">No items in queue</p>
+                <p className="text-slate-500 text-sm mt-1">Search and select items to add</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {selectedItems.map((sel) => (
+                  <div
+                    key={sel.item.id}
+                    className="p-3 rounded-lg bg-slate-800/50 border border-slate-700"
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-white truncate">{sel.item.name}</p>
+                        <p className="text-xs text-slate-400 font-mono">{sel.item.barcode}</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeSelectedItem(sel.item.id)}
+                        className="h-6 w-6 text-red-400 hover:text-red-300 hover:bg-red-500/10 -mt-1 -mr-1"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-amber-400 font-semibold">Rs. {sel.item.sellingPrice}</span>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => updateCopies(sel.item.id, -1)}
+                          className="h-7 w-7 border-slate-600"
+                        >
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <span className="w-8 text-center text-white font-semibold">{sel.copies}</span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => updateCopies(sel.item.id, 1)}
+                          className="h-7 w-7 border-slate-600"
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="pt-3 border-t border-slate-700">
+                  <Button
+                    onClick={handlePrintAll}
+                    disabled={isPrinting || status !== "connected"}
+                    className="w-full h-12 gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-900 font-semibold text-lg"
+                  >
+                    {isPrinting ? (
+                      <>Printing...</>
+                    ) : (
+                      <>
+                        <Printer className="h-5 w-5" />
+                        Print All ({totalLabels} labels)
+                      </>
+                    )}
+                  </Button>
+                  <p className="text-xs text-slate-500 text-center mt-2">
+                    {totalStrips} strip(s) will be printed
+                  </p>
+                </div>
+              </div>
+            )}
 
             <div className="mt-6 rounded-lg bg-gradient-to-r from-amber-500/10 to-orange-500/10 p-4 border border-amber-500/20">
               <p className="text-xs text-slate-400 font-medium mb-2">How it works</p>
