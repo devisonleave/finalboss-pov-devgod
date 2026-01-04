@@ -369,68 +369,71 @@ export default function BarcodesPage() {
                 <DialogHeader>
                   <DialogTitle className="text-white">Barcode Label Configuration</DialogTitle>
                 </DialogHeader>
-                    <div>
-                      <Label className="text-slate-300">Layout Settings</Label>
-                      <div className="grid grid-cols-2 gap-4 mt-2">
-                        <div>
-                          <Label htmlFor="barcodeColumns" className="text-slate-400 text-xs">Columns (Strips)</Label>
-                          <Input
-                            id="barcodeColumns"
-                            type="number"
-                            value={labelColumns}
-                            onChange={(e) => setLabelColumns(e.target.value)}
-                            className="bg-slate-800 border-slate-600 text-white mt-1"
-                            placeholder="2"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="barcodeGap" className="text-slate-400 text-xs">Gap Between (mm)</Label>
-                          <Input
-                            id="barcodeGap"
-                            type="number"
-                            value={labelGap}
-                            onChange={(e) => setLabelGap(e.target.value)}
-                            className="bg-slate-800 border-slate-600 text-white mt-1"
-                            placeholder="2"
-                          />
-                        </div>
+                <div className="space-y-6 pt-4">
+                  <div>
+                    <Label className="text-slate-300">Layout Settings</Label>
+                    <div className="grid grid-cols-2 gap-4 mt-2">
+                      <div>
+                        <Label htmlFor="barcodeColumns" className="text-slate-400 text-xs">Columns (Strips)</Label>
+                        <Input
+                          id="barcodeColumns"
+                          type="number"
+                          value={labelColumns}
+                          onChange={(e) => setLabelColumns(e.target.value)}
+                          className="bg-slate-800 border-slate-600 text-white mt-1"
+                          placeholder="2"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="barcodeGap" className="text-slate-400 text-xs">Gap Between (mm)</Label>
+                        <Input
+                          id="barcodeGap"
+                          type="number"
+                          value={labelGap}
+                          onChange={(e) => setLabelGap(e.target.value)}
+                          className="bg-slate-800 border-slate-600 text-white mt-1"
+                          placeholder="2"
+                        />
                       </div>
                     </div>
-                    <div>
-                      <Label className="text-slate-300">Label Size</Label>
-                      <div className="grid grid-cols-2 gap-4 mt-2">
-                        <div>
-                          <Label htmlFor="barcodeWidth" className="text-slate-400 text-xs">Width (mm)</Label>
-                          <Input
-                            id="barcodeWidth"
-                            type="number"
-                            value={labelWidth}
-                            onChange={(e) => setLabelWidth(e.target.value)}
-                            className="bg-slate-800 border-slate-600 text-white mt-1"
-                            placeholder="38"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="barcodeHeight" className="text-slate-400 text-xs">Height (mm)</Label>
-                          <Input
-                            id="barcodeHeight"
-                            type="number"
-                            value={labelHeight}
-                            onChange={(e) => setLabelHeight(e.target.value)}
-                            className="bg-slate-800 border-slate-600 text-white mt-1"
-                            placeholder="25"
-                          />
-                        </div>
+                  </div>
+
+                  <div>
+                    <Label className="text-slate-300">Label Size</Label>
+                    <div className="grid grid-cols-2 gap-4 mt-2">
+                      <div>
+                        <Label htmlFor="barcodeWidth" className="text-slate-400 text-xs">Width (mm)</Label>
+                        <Input
+                          id="barcodeWidth"
+                          type="number"
+                          value={labelWidth}
+                          onChange={(e) => setLabelWidth(e.target.value)}
+                          className="bg-slate-800 border-slate-600 text-white mt-1"
+                          placeholder="38"
+                        />
                       </div>
-                      <p className="text-xs text-slate-500 mt-2">Your size: 38×25mm (2-up), Common: 50×30mm</p>
+                      <div>
+                        <Label htmlFor="barcodeHeight" className="text-slate-400 text-xs">Height (mm)</Label>
+                        <Input
+                          id="barcodeHeight"
+                          type="number"
+                          value={labelHeight}
+                          onChange={(e) => setLabelHeight(e.target.value)}
+                          className="bg-slate-800 border-slate-600 text-white mt-1"
+                          placeholder="25"
+                        />
+                      </div>
                     </div>
-                  <Button onClick={handleSaveSettings} className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-slate-900">
+                    <p className="text-xs text-slate-500 mt-2">Your size: 38×25mm (2-up), Common: 50×30mm</p>
+                  </div>
+
+                  <Button onClick={handleSaveSettings} className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-slate-900 font-bold">
                     Save Settings
                   </Button>
                 </div>
               </DialogContent>
-            </Dialog>
-          <Dialog open={isDialogOpen} onOpenChange={(open) => {
+              </Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={(open) => {
             setIsDialogOpen(open);
             if (!open) {
               setFormData(initialFormData);
