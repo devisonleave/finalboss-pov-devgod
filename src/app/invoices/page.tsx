@@ -67,166 +67,182 @@ export default function InvoicesPage() {
       <html>
         <head>
           <title>Invoice ${sale.invoiceNumber}</title>
-          <style>
-            @page {
-              size: ${billWidth} auto;
-              margin: 0;
-            }
-            body {
-              font-family: 'Courier New', Courier, monospace;
-              font-size: 13px;
-              line-height: 1.2;
-              padding: 5mm;
-              width: ${billWidth};
-              background: white;
-              color: black;
-              margin: 0 auto;
-            }
-            .header {
-              text-align: center;
-              margin-bottom: 15px;
-            }
-            .org-name {
-              font-size: 18px;
-              font-weight: bold;
-              margin-bottom: 2px;
-            }
-            .tagline {
-              font-size: 11px;
-              margin-bottom: 5px;
-            }
-            .owner-details {
-              font-size: 11px;
-              margin-bottom: 10px;
-            }
-            .divider {
-              border-top: 1px dashed #000;
-              margin: 10px 0;
-            }
-            .meta {
-              display: flex;
-              justify-content: space-between;
-              font-size: 11px;
-              margin-bottom: 10px;
-            }
-            .table {
-              width: 100%;
-              border-collapse: collapse;
-            }
-            .table th {
-              text-align: left;
-              border-bottom: 1px dashed #000;
-              padding: 5px 0;
-              font-size: 12px;
-            }
-            .table td {
-              padding: 5px 0;
-              font-size: 12px;
-            }
-            .text-right { text-align: right; }
-            .totals {
-              margin-top: 10px;
-            }
-            .total-row {
-              display: flex;
-              justify-content: space-between;
-              padding: 2px 0;
-            }
-            .grand-total {
-              font-size: 16px;
-              font-weight: bold;
-              border-top: 1px dashed #000;
-              margin-top: 5px;
-              padding-top: 5px;
-            }
-            .footer {
-              text-align: center;
-              margin-top: 20px;
-              font-size: 11px;
-            }
-            .thank-you {
-              font-weight: bold;
-              margin-bottom: 5px;
-            }
-          </style>
-        </head>
-        <body>
-            <div class="header">
-              <div class="business-name">SONAKSHI BOUTIQUE</div>
-              <div style="font-size: 10px; font-style: italic; margin: 4px 0; color: #555;">From our hands to your heart</div>
-              <div class="business-info">
-                Fashion & Lifestyle<br>
-                Owner: Sonali<br>
-                Tel: +91 7413956875<br>
-                GSTIN: 29ABCDE1234F1Z5
+            <style>
+              @page {
+                size: ${billWidth} auto;
+                margin: 0;
+              }
+              body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                font-size: 13px;
+                line-height: 1.4;
+                padding: 4mm;
+                width: ${billWidth};
+                background: white;
+                color: black;
+                margin: 0 auto;
+              }
+              .bill-container {
+                border: 1.5px solid #000;
+                padding: 3mm;
+                min-height: 100%;
+              }
+              .header {
+                text-align: center;
+                margin-bottom: 12px;
+              }
+              .business-name {
+                font-size: 22px;
+                font-weight: 900;
+                letter-spacing: 1px;
+                margin-bottom: 2px;
+                text-transform: uppercase;
+              }
+              .tagline {
+                font-size: 10px;
+                font-style: italic;
+                margin-bottom: 8px;
+                color: #333;
+              }
+              .business-info {
+                font-size: 11px;
+                line-height: 1.3;
+              }
+              .divider {
+                border-top: 1px dashed #000;
+                margin: 8px 0;
+              }
+              .meta {
+                display: flex;
+                justify-content: space-between;
+                font-size: 11px;
+                margin-bottom: 6px;
+              }
+              .table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 8px 0;
+              }
+              .table th {
+                text-align: left;
+                border-bottom: 1px solid #000;
+                border-top: 1px solid #000;
+                padding: 6px 0;
+                font-size: 12px;
+                text-transform: uppercase;
+                font-weight: 700;
+              }
+              .table td {
+                padding: 6px 0;
+                font-size: 12px;
+                border-bottom: 0.5px solid #eee;
+              }
+              .text-right { text-align: right; }
+              .totals {
+                margin-top: 8px;
+                border-top: 1px solid #000;
+                padding-top: 4px;
+              }
+              .total-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 2px 0;
+                font-size: 12px;
+              }
+              .grand-total {
+                font-size: 18px;
+                font-weight: 900;
+                border-top: 2px solid #000;
+                margin-top: 4px;
+                padding-top: 6px;
+                letter-spacing: 0.5px;
+              }
+              .footer {
+                text-align: center;
+                margin-top: 15px;
+                font-size: 11px;
+              }
+              .thank-you {
+                font-weight: bold;
+                margin-bottom: 4px;
+                font-size: 13px;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="bill-container">
+              <div class="header">
+                <div class="business-name">SONAKSHI BOUTIQUE</div>
+                <div class="tagline">From our hands to your heart</div>
+                <div class="business-info">
+                  Fashion & Lifestyle<br>
+                  Owner: Sonali | Tel: +91 7413956875<br>
+                  GSTIN: 29ABCDE1234F1Z5
+                </div>
               </div>
+
+            <div class="divider"></div>
+
+            <div class="meta">
+              <span><strong>Bill No:</strong> ${sale.invoiceNumber}</span>
+              <span><strong>Date:</strong> ${new Date(sale.createdAt).toLocaleDateString('en-IN')}</span>
+            </div>
+            <div class="meta">
+              <span><strong>Customer:</strong> ${sale.customerName || 'Walk-in'}</span>
+              <span><strong>Time:</strong> ${new Date(sale.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
             </div>
 
-          <div class="divider"></div>
-
-          <div class="meta">
-            <span>Bill No: ${sale.invoiceNumber}</span>
-            <span>Date: ${new Date(sale.createdAt).toLocaleDateString('en-IN')}</span>
-          </div>
-          <div class="meta">
-            <span>Customer: ${sale.customerName || 'Cash Sale'}</span>
-            <span>Time: ${new Date(sale.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
-          </div>
-
-          <div class="divider"></div>
-
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th class="text-right">Qty</th>
-                <th class="text-right">Price</th>
-                <th class="text-right">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${sale.items.map(item => `
+            <table class="table">
+              <thead>
                 <tr>
-                  <td>${item.name}</td>
-                  <td class="text-right">${item.quantity}</td>
-                  <td class="text-right">${item.price.toFixed(0)}</td>
-                  <td class="text-right">${(item.price * item.quantity).toFixed(0)}</td>
+                  <th>Item</th>
+                  <th class="text-right">Qty</th>
+                  <th class="text-right">Price</th>
+                  <th class="text-right">Total</th>
                 </tr>
-              `).join('')}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                ${sale.items.map(item => `
+                  <tr>
+                    <td><strong>${item.name}</strong></td>
+                    <td class="text-right">${item.quantity}</td>
+                    <td class="text-right">${item.price.toFixed(0)}</td>
+                    <td class="text-right">${(item.price * item.quantity).toFixed(0)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
 
-          <div class="divider"></div>
-
-          <div class="totals">
-            <div class="total-row">
-              <span>Subtotal:</span>
-              <span>₹${sale.subtotal.toFixed(2)}</span>
-            </div>
-            ${sale.discount > 0 ? `
+            <div class="totals">
               <div class="total-row">
-                <span>Discount:</span>
-                <span>- ₹${sale.discount.toFixed(2)}</span>
+                <span>Subtotal:</span>
+                <span>₹${sale.subtotal.toFixed(2)}</span>
               </div>
-            ` : ''}
-            ${sale.tax > 0 ? `
-              <div class="total-row">
-                <span>GST:</span>
-                <span>₹${sale.tax.toFixed(2)}</span>
+              ${sale.discount > 0 ? `
+                <div class="total-row">
+                  <span>Discount:</span>
+                  <span>- ₹${sale.discount.toFixed(2)}</span>
+                </div>
+              ` : ''}
+              ${sale.tax > 0 ? `
+                <div class="total-row">
+                  <span>GST:</span>
+                  <span>₹${sale.tax.toFixed(2)}</span>
+                </div>
+              ` : ''}
+              <div class="total-row grand-total">
+                <span>NET AMOUNT:</span>
+                <span>₹${sale.total.toFixed(2)}</span>
               </div>
-            ` : ''}
-            <div class="total-row grand-total">
-              <span>NET AMOUNT:</span>
-              <span>₹${sale.total.toFixed(2)}</span>
             </div>
-          </div>
 
-          <div class="divider"></div>
+            <div class="divider"></div>
 
-          <div class="footer">
-            <div class="thank-you">Thank You for Shopping!</div>
-            <div>Visit us again at SONAKSHI BOUTIQUE</div>
-            <div style="margin-top: 10px; font-size: 9px; color: #666;">*** DUPLICATE INVOICE ***</div>
+            <div class="footer">
+              <div class="thank-you">Thank You for Shopping!</div>
+              <div>Visit us again at SONAKSHI BOUTIQUE</div>
+              <div style="margin-top: 8px; font-size: 9px; color: #666; font-style: italic;">*** CUSTOMER COPY ***</div>
+            </div>
           </div>
 
           <script>
