@@ -81,6 +81,8 @@ export default function BarcodesPage() {
   const [showSettings, setShowSettings] = useState(false);
   const [labelWidth, setLabelWidth] = useState('38');
   const [labelHeight, setLabelHeight] = useState('25');
+  const [labelColumns, setLabelColumns] = useState('2');
+  const [labelGap, setLabelGap] = useState('2');
   const printRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -92,8 +94,13 @@ export default function BarcodesPage() {
     
     const savedLabelWidth = localStorage.getItem('labelWidth');
     const savedLabelHeight = localStorage.getItem('labelHeight');
+    const savedLabelColumns = localStorage.getItem('labelColumns');
+    const savedLabelGap = localStorage.getItem('labelGap');
+
     if (savedLabelWidth) setLabelWidth(savedLabelWidth.replace('mm', ''));
     if (savedLabelHeight) setLabelHeight(savedLabelHeight.replace('mm', ''));
+    if (savedLabelColumns) setLabelColumns(savedLabelColumns);
+    if (savedLabelGap) setLabelGap(savedLabelGap.replace('mm', ''));
   }, []);
 
   const filteredItems = items.filter(item =>
@@ -122,132 +129,162 @@ export default function BarcodesPage() {
     }
   };
 
-  const handlePrintSelected = () => {
-    if (selectedItems.size === 0) {
-      toast.error('Please select items to print');
-      return;
-    }
-
-    const printWindow = window.open('', '', 'width=800,height=600');
-    if (!printWindow) {
-      toast.error('Please allow pop-ups to print');
-      return;
-    }
-
-    const selectedItemsList = items.filter(item => selectedItems.has(item.id));
-    const savedLabelWidth = localStorage.getItem('labelWidth') || '57mm';
-    const savedLabelHeight = localStorage.getItem('labelHeight') || '32mm';
-    
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Barcode Labels</title>
-          <style>
-            @page {
-              size: ${savedLabelWidth} ${savedLabelHeight};
-              margin: 0;
-            }
-            * {
-              margin: 0;
-              padding: 0;
-              box-sizing: border-box;
-            }
-            body {
-              margin: 0;
-              padding: 0;
-              font-family: Arial, sans-serif;
-            }
-            .label {
-              width: ${savedLabelWidth};
-              height: ${savedLabelHeight};
-              padding: 1.5mm;
-              box-sizing: border-box;
-              page-break-after: always;
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              text-align: center;
-            }
-            .label:last-child {
-              page-break-after: auto;
-            }
-            .org-name {
-              font-size: 7pt;
-              font-weight: bold;
-              letter-spacing: 0.5px;
-              margin-bottom: 1px;
-            }
-            .item-name {
-              font-size: 8pt;
-              font-weight: 600;
-              margin-bottom: 1px;
-              max-width: 100%;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-            }
-            .item-price {
-              font-size: 10pt;
-              font-weight: bold;
-              margin-bottom: 2px;
-            }
-            .barcode-container {
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              width: 100%;
-            }
-            .barcode-container img {
-              max-width: 100%;
-              height: auto;
-              display: block;
-              margin: 0 auto;
-            }
-          </style>
-        </head>
-        <body>
-    `);
-
-    selectedItemsList.forEach(item => {
-      const canvas = document.createElement('canvas');
-      const JsBarcode = require('jsbarcode');
-      JsBarcode(canvas, item.barcode, {
-        format: 'CODE128',
-        width: 1.5,
-        height: 30,
-        displayValue: true,
-        fontSize: 9,
-        margin: 0,
-        textMargin: 1,
-      });
-
+    const handlePrintSelected = () => {
+      if (selectedItems.size === 0) {
+        toast.error('Please select items to print');
+        return;
+      }
+  
+      const printWindow = window.open('', '', 'width=800,height=600');
+      if (!printWindow) {
+        toast.error('Please allow pop-ups to print');
+        return;
+      }
+  
+      const selectedItemsList = items.filter(item => selectedItems.has(item.id));
+      const savedLabelWidth = localStorage.getItem('labelWidth') || '38mm';
+      const savedLabelHeight = localStorage.getItem('labelHeight') || '25mm';
+      const savedLabelColumns = parseInt(localStorage.getItem('labelColumns') || '1');
+      const savedLabelGap = localStorage.getItem('labelGap') || '2mm';
+      
+      const widthNum = parseFloat(savedLabelWidth.replace('mm', ''));
+      const gapNum = parseFloat(savedLabelGap.replace('mm', ''));
+      const totalWidth = (widthNum * savedLabelColumns) + (gapNum * (savedLabelColumns - 1));
+      const totalWidthStr = `${totalWidth}mm`;
+  
       printWindow.document.write(`
-        <div class="label">
-          <div class="org-name">SONAKSHI BOUTIQUE</div>
-          <div class="item-name">${item.name}</div>
-          <div class="item-price">₹${item.sellingPrice.toFixed(2)}</div>
-          <div class="barcode-container">
-            <img src="${canvas.toDataURL()}" />
-          </div>
-        </div>
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Barcode Labels</title>
+            <style>
+              @page {
+                size: ${totalWidthStr} ${savedLabelHeight};
+                margin: 0;
+              }
+              * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+              }
+              body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+              }
+              .page-row {
+                display: flex;
+                width: ${totalWidthStr};
+                height: ${savedLabelHeight};
+                page-break-after: always;
+                overflow: hidden;
+              }
+              .page-row:last-child {
+                page-break-after: auto;
+              }
+              .label {
+                width: ${savedLabelWidth};
+                height: ${savedLabelHeight};
+                padding: 1.5mm;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                position: relative;
+              }
+              .label-spacer {
+                width: ${savedLabelGap};
+                height: 100%;
+              }
+              .org-name {
+                font-size: 7pt;
+                font-weight: bold;
+                letter-spacing: 0.5px;
+                margin-bottom: 1px;
+              }
+              .item-name {
+                font-size: 8pt;
+                font-weight: 600;
+                margin-bottom: 1px;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+              .item-price {
+                font-size: 10pt;
+                font-weight: bold;
+                margin-bottom: 2px;
+              }
+              .barcode-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+              }
+              .barcode-container img {
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 0 auto;
+              }
+            </style>
+          </head>
+          <body>
       `);
-    });
-
-    printWindow.document.write(`
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-
-    setTimeout(() => {
-      printWindow.print();
-      printWindow.close();
-    }, 250);
-
-    toast.success(`Printing ${selectedItems.size} barcode labels`);
-  };
+  
+      // Group items into rows
+      for (let i = 0; i < selectedItemsList.length; i += savedLabelColumns) {
+        const rowItems = selectedItemsList.slice(i, i + savedLabelColumns);
+        printWindow.document.write('<div class="page-row">');
+        
+        rowItems.forEach((item, index) => {
+          const canvas = document.createElement('canvas');
+          const JsBarcode = require('jsbarcode');
+          JsBarcode(canvas, item.barcode, {
+            format: 'CODE128',
+            width: 1.5,
+            height: 30,
+            displayValue: true,
+            fontSize: 9,
+            margin: 0,
+            textMargin: 1,
+          });
+  
+          printWindow.document.write(`
+            <div class="label">
+              <div class="org-name">SONAKSHI BOUTIQUE</div>
+              <div class="item-name">${item.name}</div>
+              <div class="item-price">₹${item.sellingPrice.toFixed(2)}</div>
+              <div class="barcode-container">
+                <img src="${canvas.toDataURL()}" />
+              </div>
+            </div>
+          `);
+  
+          if (index < rowItems.length - 1) {
+            printWindow.document.write('<div class="label-spacer"></div>');
+          }
+        });
+        
+        printWindow.document.write('</div>');
+      }
+  
+      printWindow.document.write(`
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+  
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 250);
+  
+      toast.success(`Printing ${selectedItems.size} barcode labels`);
+    };
 
   const handleGenerateBarcode = () => {
     const barcode = generateBarcode();
@@ -307,6 +344,8 @@ export default function BarcodesPage() {
     const handleSaveSettings = () => {
       localStorage.setItem('labelWidth', `${labelWidth}mm`);
       localStorage.setItem('labelHeight', `${labelHeight}mm`);
+      localStorage.setItem('labelColumns', labelColumns);
+      localStorage.setItem('labelGap', `${labelGap}mm`);
       setShowSettings(false);
       toast.success('Label print settings saved');
     };
@@ -330,35 +369,61 @@ export default function BarcodesPage() {
                 <DialogHeader>
                   <DialogTitle className="text-white">Barcode Label Configuration</DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4 pt-4">
-                  <div>
-                    <Label className="text-slate-300">Label Size</Label>
-                    <div className="grid grid-cols-2 gap-4 mt-2">
-                      <div>
-                        <Label htmlFor="barcodeWidth" className="text-slate-400 text-xs">Width (mm)</Label>
-                        <Input
-                          id="barcodeWidth"
-                          type="number"
-                          value={labelWidth}
-                          onChange={(e) => setLabelWidth(e.target.value)}
-                          className="bg-slate-800 border-slate-600 text-white mt-1"
-                          placeholder="38"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="barcodeHeight" className="text-slate-400 text-xs">Height (mm)</Label>
-                        <Input
-                          id="barcodeHeight"
-                          type="number"
-                          value={labelHeight}
-                          onChange={(e) => setLabelHeight(e.target.value)}
-                          className="bg-slate-800 border-slate-600 text-white mt-1"
-                          placeholder="25"
-                        />
+                    <div>
+                      <Label className="text-slate-300">Layout Settings</Label>
+                      <div className="grid grid-cols-2 gap-4 mt-2">
+                        <div>
+                          <Label htmlFor="barcodeColumns" className="text-slate-400 text-xs">Columns (Strips)</Label>
+                          <Input
+                            id="barcodeColumns"
+                            type="number"
+                            value={labelColumns}
+                            onChange={(e) => setLabelColumns(e.target.value)}
+                            className="bg-slate-800 border-slate-600 text-white mt-1"
+                            placeholder="2"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="barcodeGap" className="text-slate-400 text-xs">Gap Between (mm)</Label>
+                          <Input
+                            id="barcodeGap"
+                            type="number"
+                            value={labelGap}
+                            onChange={(e) => setLabelGap(e.target.value)}
+                            className="bg-slate-800 border-slate-600 text-white mt-1"
+                            placeholder="2"
+                          />
+                        </div>
                       </div>
                     </div>
-                    <p className="text-xs text-slate-500 mt-2">Your size: 38×25mm, Common: 50×30mm, 57×32mm</p>
-                  </div>
+                    <div>
+                      <Label className="text-slate-300">Label Size</Label>
+                      <div className="grid grid-cols-2 gap-4 mt-2">
+                        <div>
+                          <Label htmlFor="barcodeWidth" className="text-slate-400 text-xs">Width (mm)</Label>
+                          <Input
+                            id="barcodeWidth"
+                            type="number"
+                            value={labelWidth}
+                            onChange={(e) => setLabelWidth(e.target.value)}
+                            className="bg-slate-800 border-slate-600 text-white mt-1"
+                            placeholder="38"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="barcodeHeight" className="text-slate-400 text-xs">Height (mm)</Label>
+                          <Input
+                            id="barcodeHeight"
+                            type="number"
+                            value={labelHeight}
+                            onChange={(e) => setLabelHeight(e.target.value)}
+                            className="bg-slate-800 border-slate-600 text-white mt-1"
+                            placeholder="25"
+                          />
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-2">Your size: 38×25mm (2-up), Common: 50×30mm</p>
+                    </div>
                   <Button onClick={handleSaveSettings} className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-slate-900">
                     Save Settings
                   </Button>

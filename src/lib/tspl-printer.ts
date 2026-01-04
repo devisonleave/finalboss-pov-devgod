@@ -6,6 +6,7 @@ export interface LabelConfig {
   dpi: number;
   columns: number;
   columnGap: number;
+  xOffset: number; // Global X offset for roll margins
 }
 
 export const TSC_TE244_CONFIG: LabelConfig = {
@@ -16,6 +17,7 @@ export const TSC_TE244_CONFIG: LabelConfig = {
   dpi: 203,
   columns: 2,
   columnGap: 2,
+  xOffset: 0,
 };
 
 function mmToInches(mm: number): number {
@@ -68,7 +70,7 @@ export function generateTSPLCommands(
     commands += `CLS\r\n`;
 
     pair.forEach((label, col) => {
-      const offsetX = col * (singleLabelWidth + colGapDots);
+      const offsetX = (col * (singleLabelWidth + colGapDots)) + mmToDots(config.xOffset, config.dpi);
       const centerX = offsetX + Math.round(singleLabelWidth / 2);
 
       let y = 8;
