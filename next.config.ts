@@ -33,7 +33,4 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-<<<<<<< HEAD
 // Orchids restart: 1767381272377
-=======
->>>>>>> 01bcb1f (Sync codebase)
