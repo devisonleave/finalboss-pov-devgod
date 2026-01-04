@@ -37,12 +37,12 @@ export default function DashboardPage() {
   const todayTotal = todaySales.reduce((sum, s) => sum + s.total, 0);
   
   const todayProfit = todaySales.reduce((sum, sale) => {
-    const saleProfit = sale.items.reduce((itemSum, item) => {
+    const totalCost = sale.items.reduce((itemSum, item) => {
       const itemData = items.find(i => i.id === item.itemId);
       if (!itemData) return itemSum;
-      return itemSum + ((item.price - itemData.purchasePrice) * item.quantity);
+      return itemSum + (itemData.purchasePrice * item.quantity);
     }, 0);
-    return sum + saleProfit;
+    return sum + (sale.total - totalCost);
   }, 0);
 
   const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -50,12 +50,12 @@ export default function DashboardPage() {
   const monthlyTotal = monthlySales.reduce((sum, s) => sum + s.total, 0);
   
   const monthlyProfit = monthlySales.reduce((sum, sale) => {
-    const saleProfit = sale.items.reduce((itemSum, item) => {
+    const totalCost = sale.items.reduce((itemSum, item) => {
       const itemData = items.find(i => i.id === item.itemId);
       if (!itemData) return itemSum;
-      return itemSum + ((item.price - itemData.purchasePrice) * item.quantity);
+      return itemSum + (itemData.purchasePrice * item.quantity);
     }, 0);
-    return sum + saleProfit;
+    return sum + (sale.total - totalCost);
   }, 0);
 
   const lowStockItems = items.filter(item => item.stock <= item.minStock);
