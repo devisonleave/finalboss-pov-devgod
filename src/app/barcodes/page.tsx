@@ -199,13 +199,13 @@ export default function BarcodesPage() {
                 height: 100%;
               }
               .org-name {
-                font-size: 20pt;
+                font-size: 15pt;
                 font-weight: bold;
                 letter-spacing: 0.5px;
                 margin-bottom: 1px;
               }
               .item-name {
-                font-size: 22pt;
+                font-size: 10pt;
                 font-weight: 600;
                 margin-bottom: 1px;
                 max-width: 100%;
@@ -214,7 +214,7 @@ export default function BarcodesPage() {
                 white-space: nowrap;
               }
               .item-price {
-                font-size: 20pt;
+                font-size: 13pt;
                 font-weight: bold;
                 margin-bottom: 2px;
               }
