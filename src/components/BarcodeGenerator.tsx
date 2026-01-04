@@ -27,12 +27,9 @@ export function BarcodeGenerator({
           format,
           width,
           height,
-            displayValue,
-            fontSize: 16,
-            font: 'monospace',
-            fontOptions: 'bold',
-            margin: 10,
-
+          displayValue,
+          fontSize: 14,
+          margin: 10,
           background: '#ffffff',
           lineColor: '#000000',
         });
@@ -41,12 +38,9 @@ export function BarcodeGenerator({
           format: 'CODE128',
           width,
           height,
-            displayValue,
-            fontSize: 16,
-            font: 'monospace',
-            fontOptions: 'bold',
-            margin: 10,
-
+          displayValue,
+          fontSize: 14,
+          margin: 10,
           background: '#ffffff',
           lineColor: '#000000',
         });

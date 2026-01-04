@@ -71,30 +71,27 @@ export function generateTSPLCommands(
       const offsetX = col * (singleLabelWidth + colGapDots);
       const centerX = offsetX + Math.round(singleLabelWidth / 2);
 
-      let y = 10;
-      // Store Name - Larger and Bold
-      commands += `TEXT ${centerX},${y},"3",0,1,1,2,"SONAKSHI BOUTIQUE"\r\n`;
+      let y = 8;
+      commands += `TEXT ${centerX},${y},"2",0,1,1,2,"SONAKSHI BOUTIQUE"\r\n`;
 
-      y += 30;
-      const barcodeHeight = 60;
+      y += 24;
+      const barcodeHeight = 45;
       const barcodeX = offsetX + 10;
       const barcodeWidthNarrow = 2;
       commands += `BARCODE ${barcodeX},${y},"128",${barcodeHeight},0,0,${barcodeWidthNarrow},${barcodeWidthNarrow},"${label.barcode}"\r\n`;
 
       y += barcodeHeight + 5;
-      // Barcode text - larger
       commands += `TEXT ${centerX},${y},"2",0,1,1,2,"${label.barcode}"\r\n`;
 
-      y += 25;
+      y += 20;
       if (label.productName) {
-        const truncatedName = truncateText(label.productName, 20);
+        const truncatedName = truncateText(label.productName, 16);
         commands += `TEXT ${centerX},${y},"2",0,1,1,2,"${truncatedName}"\r\n`;
       }
 
-      y += 25;
+      y += 20;
       if (label.price) {
-        // Price - much larger
-        commands += `TEXT ${centerX},${y},"4",0,1,1,2,"Rs.${label.price}"\r\n`;
+        commands += `TEXT ${centerX},${y},"3",0,1,1,2,"Rs.${label.price}"\r\n`;
       }
     });
 
@@ -133,30 +130,27 @@ export function generateSingleLabelTSPL(
     const offsetX = col * (singleLabelWidth + colGapDots);
     const centerX = offsetX + Math.round(singleLabelWidth / 2);
 
-    let y = 10;
-    // Store Name - Larger and Bold
-    commands += `TEXT ${centerX},${y},"3",0,1,1,2,"SONAKSHI BOUTIQUE"\r\n`;
+    let y = 8;
+    commands += `TEXT ${centerX},${y},"2",0,1,1,2,"SONAKSHI BOUTIQUE"\r\n`;
 
-    y += 30;
-    const barcodeHeight = 60;
+    y += 24;
+    const barcodeHeight = 45;
     const barcodeX = offsetX + 10;
     const barcodeWidthNarrow = 2;
     commands += `BARCODE ${barcodeX},${y},"128",${barcodeHeight},0,0,${barcodeWidthNarrow},${barcodeWidthNarrow},"${label.barcode}"\r\n`;
 
     y += barcodeHeight + 5;
-    // Barcode text - larger
     commands += `TEXT ${centerX},${y},"2",0,1,1,2,"${label.barcode}"\r\n`;
 
-    y += 25;
+    y += 20;
     if (label.productName) {
-      const truncatedName = truncateText(label.productName, 20);
+      const truncatedName = truncateText(label.productName, 16);
       commands += `TEXT ${centerX},${y},"2",0,1,1,2,"${truncatedName}"\r\n`;
     }
 
-    y += 25;
+    y += 20;
     if (label.price) {
-      // Price - much larger
-      commands += `TEXT ${centerX},${y},"4",0,1,1,2,"Rs.${label.price}"\r\n`;
+      commands += `TEXT ${centerX},${y},"3",0,1,1,2,"Rs.${label.price}"\r\n`;
     }
   }
 
