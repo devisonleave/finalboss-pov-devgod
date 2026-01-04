@@ -20,8 +20,10 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 export default function DashboardPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [sales, setSales] = useState<Sale[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     async function loadData() {
       const [itemsData, salesData] = await Promise.all([getItems(), getSales()]);
       setItems(itemsData);
@@ -29,6 +31,10 @@ export default function DashboardPage() {
     }
     loadData();
   }, []);
+
+  if (!isMounted) {
+    return <div className="p-8"><div className="animate-pulse bg-slate-800 h-8 w-48 rounded mb-8" /></div>;
+  }
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
