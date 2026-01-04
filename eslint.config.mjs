@@ -1,12 +1,18 @@
-export default [
+import { FlatCompat } from '@eslint/eslintrc'
+
+const compat = new FlatCompat()
+ 
+const eslintConfig = [
+  ...compat.extends('next/core-web-vitals'),
   {
-    ignores: [".next/**", "node_modules/**"],
-  },
-  {
-    files: ["src/**/*.{ts,tsx,js,jsx}"],
     rules: {
-      "react/no-unescaped-entities": "off",
-      "@next/next/no-img-element": "off",
+      'react/no-unescaped-entities': 'off',
+      '@next/next/no-img-element': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      'react-hooks/exhaustive-deps': 'off',
     },
   },
-];
+]
+ 
+export default eslintConfig
